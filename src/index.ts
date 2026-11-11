@@ -1,6 +1,6 @@
 import express, { type Express, type Request, type Response } from "express";
 import { handlerReadiness } from "./api/readiness.js";
-import { middlewareLogResponses, middlewareMetricsInc } from "./api/middleware.js";
+import { middlewareErrorHandler, middlewareLogResponses, middlewareMetricsInc } from "./api/middleware.js";
 import { handlerMetrics, handlerReset } from "./api/metrics.js";
 import { handlerValidateChirp } from "./api/validate_chirp.js";
 
@@ -15,6 +15,7 @@ app.post("/admin/reset", handlerReset);
 app.use("/app", middlewareMetricsInc);
 app.use("/app", express.static("./src/app"));
 app.use(middlewareLogResponses);
+app.use(middlewareErrorHandler);
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
